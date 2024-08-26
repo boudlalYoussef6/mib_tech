@@ -1,0 +1,45 @@
+{% extends 'site.html.twig' %}
+
+{% block title %}Filter Authors{% endblock %}
+
+{% block content %}
+
+
+        {{ form_start(form, {'attr': {'class': 'd-flex align-items-center'}}) }}
+        {{ form_row(form.name, {'attr': {'class': 'form-control me-2', 'placeholder': 'Search by name'}}) }}
+        <button type="submit" class="btn btn-outline-success" style="margin-left: 10px;margin-top: 20px">Filter</button>
+        {{ form_end(form) }}
+
+
+        <!-- Résultats -->
+        <h2 class="text-center mb-4">Results</h2> <!-- Centrer le titre des résultats -->
+
+        {% if authors is empty %}
+            <p class="text-center">No authors found.</p> <!-- Centrer le message -->
+        {% else %}
+            <div class="table-responsive"> <!-- Ajout d'un conteneur pour rendre le tableau réactif -->
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Birth Date</th>
+                        <th>Biography</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for author in authors %}
+                        <tr>
+                            <td>{{ author.id }}</td>
+                            <td>{{ author.name }}</td>
+                            <td>{{ author.birthDate ? author.birthDate|date('Y-m-d') : 'N/A' }}</td>
+                            <td>{{ author.biography ? (author.biography|length > 50 ? author.biography|slice(0, 50) ~ '...' : author.biography) : 'N/A' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

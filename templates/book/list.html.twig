@@ -1,0 +1,72 @@
+{% extends 'site.html.twig' %}
+
+{% block title %}Book List{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Book List</h1>
+
+        {% if app.flashes('error') is not empty %}
+            <div class="alert alert-danger">
+                {% for flash_message in app.flashes('error') %}
+                    <p>{{ flash_message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if app.flashes('success') is not empty %}
+            <div class="alert alert-success">
+                {% for flash_message in app.flashes('success') %}
+                    <p>{{ flash_message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Button for creating a new book -->
+        <div class="mb-3">
+            <a href="{{ path('book_new') }}" class="btn btn-primary">Create New Book</a>
+            <a href="{{ path('book_filter') }}" class="btn btn-secondary">Filtrer le livre</a>
+        </div>
+
+        <!-- Table displaying the list of books -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Publication Date</th>
+                <th>Author</th>
+                <th>Categories</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.id }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.description }}</td>
+                    <td>{{ book.publicationDate ? book.publicationDate|date('Y-m-d') : 'N/A' }}</td>
+                    <td>{{ book.author.name }}</td>
+                    <td>
+                        <ul>
+                            {% for category in book.categories %}
+                                <li>{{ category.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="{{ path('book_edit', { id: book.id }) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ path('book_delete', { id: book.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">No books found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'site.html.twig' %}
+
+{% block title %}Filter Books{% endblock %}
+
+{% block content %}
+
+    {{ form_start(form, {'attr': {'class': 'd-flex align-items-center'}}) }}
+    {{ form_row(form.publicationDate, {'attr': {'class': 'form-control me-2', 'placeholder': 'Search by publication date'}}) }}
+    <button type="submit" class="btn btn-outline-success" style="margin-left: 10px;margin-top: 20px">Filter</button>
+    {{ form_end(form) }}
+
+
+    <h2 class="text-center mb-4">Filtered Books</h2>
+
+    {% if books is empty %}
+        <p class="text-center">No books found.</p>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Publication Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.id }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.publicationDate ? book.publicationDate|date('Y-m-d') : 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}

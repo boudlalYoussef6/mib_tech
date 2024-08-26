@@ -1,0 +1,65 @@
+{% extends 'site.html.twig' %}
+
+{% block title %}Category List{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Category List</h1>
+
+        {% if app.flashes('error') is not empty %}
+            <div class="alert alert-danger">
+                {% for flash_message in app.flashes('error') %}
+                    <p>{{ flash_message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if app.flashes('success') is not empty %}
+            <div class="alert alert-success">
+                {% for flash_message in app.flashes('success') %}
+                    <p>{{ flash_message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Button for creating a new category -->
+        <div class="mb-3">
+            <a href="{{ path('category_new') }}" class="btn btn-primary">Create New Category</a>
+        </div>
+
+        <!-- Table displaying the list of categories -->
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Books</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <ul>
+                            {% for book in category.books %}
+                                <li>{{ book.title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="{{ path('category_edit', { id: category.id }) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ path('category_delete', { id: category.id }) }}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this category?')">Delete</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No categories found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
